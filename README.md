@@ -36,22 +36,54 @@
 ### 环境要求
 
 - Windows 10/11 (x64)
-- [Node.js](https://nodejs.org/) v18+（推荐 LTS 版本）
-- npm（随 Node.js 安装）
+- [Node.js](https://nodejs.org/) v18+（推荐 LTS 版本，安装时勾选 "Add to PATH"）
+- [Git](https://git-scm.com/)
 
-### 正式环境（main 分支，当前稳定版）
+### 步骤一：下载正式环境
 
-```bash
-git clone https://github.com/zhangwenbo77777-cmyk/it-toolbox.git && cd it-toolbox && npm install && npm start
-```
-
-### 测试环境（dev 分支，最新开发版）
+正式环境对应 `main` 分支，是当前稳定版本，用于日常使用。
 
 ```bash
-git clone https://github.com/zhangwenbo77777-cmyk/it-toolbox.git it-toolbox-dev && cd it-toolbox-dev && git checkout dev && npm install && npm start
+git clone https://github.com/zhangwenbo77777-cmyk/it-toolbox.git
+cd it-toolbox
+npm install
+npm start
 ```
 
-> 两个环境可以同时存在，互不影响。正式环境用于日常使用，测试环境用于验证新功能。
+### 步骤二：下载测试环境
+
+测试环境对应 `dev` 分支，包含最新开发中的功能，用于开发和验证。请另开一个终端执行：
+
+```bash
+git clone https://github.com/zhangwenbo77777-cmyk/it-toolbox.git it-toolbox-dev
+cd it-toolbox-dev
+git checkout dev
+npm install
+npm start
+```
+
+> 两个环境目录完全独立，可以同时运行互不影响。
+
+### 步骤三：配置开发环境
+
+两个环境下载完成后，即可使用 Claude Code 或 VS Code (Copilot) 进行开发：
+
+**Claude Code：**
+
+```bash
+# 安装 Claude Code CLI
+npm install -g @anthropic-ai/claude-code
+
+# 进入测试环境开始开发
+cd it-toolbox-dev
+claude
+```
+
+**VS Code (Copilot)：**
+
+用 VS Code 打开 `it-toolbox-dev` 文件夹，即可使用 Copilot 辅助编码。
+
+> **重要**：所有新功能请在测试环境（dev 分支）开发，测试通过后再合并到正式环境。
 
 ### 打包
 
@@ -83,24 +115,14 @@ it-toolbox/
 
 ## 使用 Claude Code 继续开发
 
-[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 是 Anthropic 官方的 CLI 编程助手，可以直接在终端中对话式开发本项目。
-
-### 安装
-
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-### 使用
-
-在项目目录下启动：
+在步骤三中已安装的 Claude Code，进入测试环境目录即可使用：
 
 ```bash
 cd it-toolbox-dev
 claude
 ```
 
-然后可以直接用自然语言描述需求，例如：
+可以直接用自然语言描述需求，例如：
 
 ```
 帮我修复 CPU 频率在老机器上轮询卡顿的问题
