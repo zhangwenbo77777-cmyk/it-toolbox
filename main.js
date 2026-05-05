@@ -672,8 +672,12 @@ async function getRealtimeStats() {
   if (realtimeLock) return null;
   realtimeLock = true;
   try {
-    // 一次 PS 调用获取 CPU + GPU + 内存
+    // 一次 PS 调用获取 CPU + GPU + 内存 + CPU频率
     const result = await execPsSession(`$cpu = (Get-Counter -Counter '\\Processor(_Total)\\% Processor Time' -ErrorAction SilentlyContinue).CounterSamples.CookedValue
+$cpuPerf = (Get-Counter -Counter '\\Processor Information(_Total)\\% Processor Performance' -ErrorAction SilentlyContinue).CounterSamples.CookedValue
+$cpuBaseFreq = (Get-Counter -Counter '\\Processor Information(_Total)\\Processor Frequency' -ErrorAction SilentlyContinue).CounterSamples.CookedValue
+$cpuFreq = $null
+if ($cpuBaseFreq -and $cpuPerf) { $cpuFreq = [math]::Round($cpuBaseFreq * $cpuPerf / 100) }
 $gpuSamples = (Get-Counter -Counter '\\GPU Engine(*)\\Utilization Percentage' -ErrorAction SilentlyContinue).CounterSamples
 $gpuMax = 0
 if ($gpuSamples) { foreach ($s in $gpuSamples) { if ($s.CookedValue -gt $gpuMax) { $gpuMax = $s.CookedValue } } }
@@ -683,6 +687,7 @@ $memUsed = [math]::Round(($mem.TotalVisibleMemorySize - $mem.FreePhysicalMemory)
 $memUsage = [math]::Round(($mem.TotalVisibleMemorySize - $mem.FreePhysicalMemory) / $mem.TotalVisibleMemorySize * 100, 1)
 @{
   CpuUsage = if ($cpu -ne $null) { [math]::Round($cpu, 1) } else { $null };
+  CpuFreq = $cpuFreq;
   GpuUsage = [math]::Round($gpuMax, 1);
   MemTotal = $memTotal;
   MemUsed = $memUsed;
@@ -691,10 +696,11 @@ $memUsage = [math]::Round(($mem.TotalVisibleMemorySize - $mem.FreePhysicalMemory
 
     if (!result) return null;
 
-    let cpuUsage = null, gpuUsage = null, memTotal = null, memUsed = null, memUsage = null;
+    let cpuUsage = null, cpuFreq = null, gpuUsage = null, memTotal = null, memUsed = null, memUsage = null;
     try {
       const data = JSON.parse(result);
       cpuUsage = data.CpuUsage !== null ? data.CpuUsage.toFixed(1) : null;
+      cpuFreq = data.CpuFreq || null;
       gpuUsage = data.GpuUsage > 0 ? data.GpuUsage.toFixed(1) : null;
       memTotal = data.MemTotal.toFixed(2);
       memUsed = data.MemUsed.toFixed(2);
@@ -720,6 +726,7 @@ $memUsage = [math]::Round(($mem.TotalVisibleMemorySize - $mem.FreePhysicalMemory
 
     return {
       cpuUsage,
+      cpuFreq,
       gpuUsage,
       gpuName: gpu.name,
       gpuDriver: gpu.driver,

@@ -695,6 +695,7 @@ function startRealtimeUpdate() {
       if (result.success && result.data) {
         // CPU
         if (result.data.cpuUsage) cpuUsage.textContent = result.data.cpuUsage;
+        if (result.data.cpuFreq) cpuSpeed.textContent = (result.data.cpuFreq / 1000).toFixed(1);
 
         // 内存
         if (result.data.memUsage) memoryUsage.textContent = result.data.memUsage;
