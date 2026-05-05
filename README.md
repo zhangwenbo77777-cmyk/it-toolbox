@@ -33,15 +33,43 @@
 
 ## 下载与运行
 
-### 环境要求
+### 步骤一：安装基础环境
 
-- Windows 10/11 (x64)
-- [Node.js](https://nodejs.org/) v18+（推荐 LTS 版本，安装时勾选 "Add to PATH"）
-- [Git](https://git-scm.com/)
+在开始之前，需要先安装以下软件（任选盘符安装，安装时全部保持默认选项即可）：
 
-### 步骤一：下载正式环境
+1. **Git** — 代码版本管理工具
+   - 下载地址：https://git-scm.com/download/win
+   - 安装时全部默认下一步即可
+
+2. **Node.js** — JavaScript 运行环境（v18+，推荐 LTS 版本）
+   - 下载地址：https://nodejs.org/
+   - 安装时**务必勾选 "Add to PATH"**，其余默认下一步
+
+3. **VS Code** — 代码编辑器（用于开发）
+   - 下载地址：https://code.visualstudio.com/
+   - 安装时建议勾选 "添加到 PATH"
+
+安装完成后，打开命令提示符或 PowerShell，验证安装是否成功：
+
+```bash
+git --version
+node --version
+npm --version
+```
+
+三个命令都返回版本号即表示安装成功。
+
+### 步骤二：下载正式环境
 
 正式环境对应 `main` 分支，是当前稳定版本，用于日常使用。
+
+先切换到你想要存放项目的盘符，例如 E 盘：
+
+```bash
+E:
+```
+
+然后下载并运行：
 
 ```bash
 git clone https://github.com/zhangwenbo77777-cmyk/it-toolbox.git
@@ -50,11 +78,16 @@ npm install
 npm start
 ```
 
-### 步骤二：下载测试环境
+项目会下载到 `E:\it-toolbox` 目录。
 
-测试环境对应 `dev` 分支，包含最新开发中的功能，用于开发和验证。请另开一个终端执行：
+### 步骤三：下载测试环境
+
+测试环境对应 `dev` 分支，包含最新开发中的功能，用于开发和验证。
+
+同样先切换到同一个盘符，然后下载：
 
 ```bash
+E:
 git clone https://github.com/zhangwenbo77777-cmyk/it-toolbox.git it-toolbox-dev
 cd it-toolbox-dev
 git checkout dev
@@ -62,11 +95,13 @@ npm install
 npm start
 ```
 
-> 两个环境目录完全独立，可以同时运行互不影响。
+项目会下载到 `E:\it-toolbox-dev` 目录。
 
-### 步骤三：配置开发环境
+> 两个环境目录完全独立，可以同时运行互不影响。盘符自由选择（C/D/E/F 均可）。
 
-两个环境下载完成后，即可使用 Claude Code 或 VS Code (Copilot) 进行开发：
+### 步骤四：配置开发工具
+
+环境下载完成后，即可使用 Claude Code 或 VS Code (Copilot) 进行开发：
 
 **Claude Code：**
 
@@ -75,13 +110,13 @@ npm start
 npm install -g @anthropic-ai/claude-code
 
 # 进入测试环境开始开发
-cd it-toolbox-dev
+cd E:\it-toolbox-dev
 claude
 ```
 
 **VS Code (Copilot)：**
 
-用 VS Code 打开 `it-toolbox-dev` 文件夹，即可使用 Copilot 辅助编码。
+用 VS Code 打开 `it-toolbox-dev` 文件夹，安装 GitHub Copilot 插件，即可辅助编码。
 
 > **重要**：所有新功能请在测试环境（dev 分支）开发，测试通过后再合并到正式环境。
 
