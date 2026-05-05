@@ -33,6 +33,8 @@
 
 ## 下载与运行
 
+> **以下所有命令请在 PowerShell 中执行。** 打开方式：右键开始菜单 → Windows PowerShell。
+
 ### 步骤一：安装基础环境
 
 在开始之前，需要先安装以下软件（任选盘符安装，安装时全部保持默认选项即可）：
@@ -63,7 +65,7 @@ npm --version
 
 正式环境对应 `main` 分支，是当前稳定版本，用于日常使用。
 
-先切换到你想要存放项目的盘符，例如 E 盘（打开 PowerShell 执行）：
+先切换到你想要存放项目的盘符，例如 E 盘：
 
 ```bash
 cd E:\
@@ -150,7 +152,7 @@ it-toolbox/
 
 ## 使用 Claude Code 继续开发
 
-在步骤三中已安装的 Claude Code，进入测试环境目录即可使用：
+在步骤四中已安装的 Claude Code，进入测试环境目录即可使用：
 
 ```bash
 cd it-toolbox-dev
@@ -170,24 +172,24 @@ claude
 - **所有新功能在 dev 分支开发**，测试稳定后合并到 main
 - **关键改动必须先确认再执行**——Claude Code 会在执行前询问
 - **每次更新完记得打包**：`npm run build:win`
-- **VS Code 终端运行时**需先执行 `unset ELECTRON_RUN_AS_NODE`
+- **VS Code 终端运行时**需先执行 `$env:ELECTRON_RUN_AS_NODE=""`（PowerShell）
 
 ### 双环境工作流
 
 ```
-正式环境  e:\ITgjx       main 分支  ← 合并后的稳定版
-测试环境  e:\ITgjx-dev   dev 分支   ← 日常开发
+正式环境  E:\it-toolbox       main 分支  ← 合并后的稳定版
+测试环境  E:\it-toolbox-dev   dev 分支   ← 日常开发
 ```
 
 ```bash
 # 在测试环境开发新功能
-cd e:\ITgjx-dev
+cd E:\it-toolbox-dev
 # ... 修改代码 ...
 git add . && git commit -m "feat: 新功能描述"
 git push
 
 # 测试通过后，合并到正式环境
-cd e:\ITgjx
+cd E:\it-toolbox
 git merge dev
 git push
 ```
