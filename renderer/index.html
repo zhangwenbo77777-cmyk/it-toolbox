@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <title>KS 系统监控</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- 侧边栏 -->
+    <nav class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">KS</div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-item active" data-page="hardware">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
+            </svg>
+          </div>
+          <span class="nav-label">硬件信息</span>
+        </div>
+        <div class="nav-item" data-page="network">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+          </div>
+          <span class="nav-label">网络检测</span>
+        </div>
+        <div class="nav-item" data-page="quick">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/>
+            </svg>
+          </div>
+          <span class="nav-label">快捷访问</span>
+        </div>
+      </div>
+      <div class="sidebar-version">v1.0.8</div>
+    </nav>
+
+    <!-- 内容区 -->
+    <div class="content-area">
+      <!-- 硬件信息页面 -->
+      <div class="page active" id="page-hardware">
+        <div class="container">
+          <header class="header">
+            <div class="logo">
+              <div class="logo-icon">KS</div>
+              <h1>系统监控</h1>
+            </div>
+            <div class="version">v1.0.8</div>
+          </header>
+
+          <section class="config-section">
+            <div class="section-header">
+              <h2>电脑配置</h2>
+              <button class="refresh-btn" id="config-refresh-btn">刷新</button>
+            </div>
+            <div class="config-grid" id="config-container">
+              <div class="loading"><div class="spinner"></div><p>正在检测...</p></div>
+            </div>
+          </section>
+
+          <section class="system-section">
+            <div class="system-grid">
+              <div class="monitor-card cpu-card">
+                <div class="card-header">
+                  <div class="card-icon">CPU</div>
+                  <div class="card-title">
+                    <span class="cpu-name" id="cpu-name">检测中...</span>
+                    <span class="cpu-cores" id="cpu-cores"></span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="metrics-row">
+                    <div class="metric">
+                      <div class="metric-label">占用率</div>
+                      <div class="wave-container">
+                        <svg class="wave-svg" viewBox="0 0 100 30" preserveAspectRatio="none">
+                          <path class="wave-path" d="M0,15 Q25,5 50,15 T100,15 V30 H0 Z"/>
+                        </svg>
+                        <span class="metric-value" id="cpu-usage">0</span>
+                        <span class="metric-unit">%</span>
+                      </div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">温度</div>
+                      <div class="metric-value-group">
+                        <span class="metric-value" id="cpu-temp">--</span>
+                        <span class="metric-unit">C</span>
+                      </div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">频率</div>
+                      <div class="metric-value-group">
+                        <span class="metric-value" id="cpu-speed">--</span>
+                        <span class="metric-unit">GHz</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="monitor-card memory-card">
+                <div class="card-header">
+                  <div class="card-icon">MEM</div>
+                  <div class="card-title">
+                    <span class="memory-total" id="memory-total">检测中...</span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="metrics-row">
+                    <div class="metric">
+                      <div class="metric-label">占用率</div>
+                      <div class="wave-container memory-wave">
+                        <svg class="wave-svg" viewBox="0 0 100 30" preserveAspectRatio="none">
+                          <path class="wave-path" d="M0,15 Q25,5 50,15 T100,15 V30 H0 Z"/>
+                        </svg>
+                        <span class="metric-value" id="memory-usage">0</span>
+                        <span class="metric-unit">%</span>
+                      </div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">已用</div>
+                      <div class="metric-value-group">
+                        <span class="metric-value" id="memory-used">--</span>
+                        <span class="metric-unit">GB</span>
+                      </div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">插槽</div>
+                      <div class="slots-indicator">
+                        <div class="slots-visual" id="slots-visual"></div>
+                        <span class="slots-text" id="slots-text">--/--</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="monitor-card gpu-card">
+                <div class="card-header">
+                  <div class="card-icon">GPU</div>
+                  <div class="card-title">
+                    <span class="gpu-name" id="gpu-name">检测中...</span>
+                    <span class="gpu-driver" id="gpu-driver"></span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="metrics-row">
+                    <div class="metric">
+                      <div class="metric-label">GPU占用</div>
+                      <div class="wave-container gpu-wave">
+                        <svg class="wave-svg" viewBox="0 0 100 30" preserveAspectRatio="none">
+                          <path class="wave-path" d="M0,15 Q25,5 50,15 T100,15 V30 H0 Z"/>
+                        </svg>
+                        <span class="metric-value" id="gpu-usage">--</span>
+                        <span class="metric-unit">%</span>
+                      </div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">显存</div>
+                      <div class="metric-value-group vram-group">
+                        <span class="metric-value vram-value" id="gpu-vram-usage">--</span>
+                      </div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">温度</div>
+                      <div class="metric-value-group">
+                        <span class="metric-value" id="gpu-temp">--</span>
+                        <span class="metric-unit">C</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="monitor-card os-card">
+                <div class="card-header">
+                  <div class="card-icon">OS</div>
+                  <div class="card-title">
+                    <span class="os-name" id="os-name">检测中...</span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="os-info">
+                    <div class="os-icon">
+                      <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+                      </svg>
+                    </div>
+                    <div class="os-details">
+                      <div class="os-version" id="os-version">Windows</div>
+                      <div class="os-build">系统版本</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="disk-section">
+            <div class="section-header">
+              <h2>存储设备</h2>
+              <button class="refresh-btn" id="disk-refresh-btn">刷新</button>
+            </div>
+            <div class="disk-container" id="disk-container">
+              <div class="loading"><div class="spinner"></div><p>正在检测...</p></div>
+            </div>
+          </section>
+
+          <section class="slots-section">
+            <div class="section-header">
+              <h2>硬盘接口</h2>
+            </div>
+            <div class="slots-container" id="slots-container">
+              <div class="loading"><div class="spinner"></div><p>正在检测...</p></div>
+            </div>
+          </section>
+          <footer class="footer"><p>KS System Monitor</p></footer>
+        </div>
+      </div>
+
+      <!-- 网络检测页面 -->
+      <div class="page" id="page-network">
+        <div class="container">
+          <header class="header">
+            <div class="logo">
+              <div class="logo-icon">KS</div>
+              <h1>网络检测</h1>
+            </div>
+          </header>
+
+          <section class="network-section">
+            <div class="section-header">
+              <h2>网卡信息</h2>
+            </div>
+            <div class="network-container" id="network-container">
+              <div class="loading"><div class="spinner"></div><p>正在检测...</p></div>
+            </div>
+          </section>
+
+          <section class="proxy-section">
+            <div class="section-header">
+              <h2>网络代理</h2>
+            </div>
+            <div class="proxy-container" id="proxy-container">
+              <div class="loading"><div class="spinner"></div><p>正在检测...</p></div>
+            </div>
+          </section>
+
+          <section class="ping-section">
+            <div class="section-header">
+              <h2>连通性测试</h2>
+            </div>
+            <div class="ping-container" id="ping-container">
+              <div class="ping-controls">
+                <input type="text" class="ping-input" id="ping-target" value="baidu.com" placeholder="输入目标地址">
+                <button class="ping-btn" id="ping-btn">测试</button>
+                <button class="ping-btn ping-btn-stop" id="ping-stop-btn" style="display:none">停止</button>
+                <div class="ping-toggle-group">
+                  <span class="ping-toggle-label">持续测试</span>
+                  <div class="proxy-toggle" id="ping-continuous-toggle">
+                    <div class="proxy-toggle-knob"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="ping-output-wrapper">
+                <div class="ping-output" id="ping-output"></div>
+                <button class="ping-clear-btn" id="ping-clear-btn" style="display:none">清空</button>
+              </div>
+            </div>
+          </section>
+          <footer class="footer"><p>KS System Monitor</p></footer>
+        </div>
+      </div>
+
+      <!-- 快捷访问页面 -->
+      <div class="page" id="page-quick">
+        <div class="container">
+          <header class="header">
+            <div class="logo">
+              <div class="logo-icon">KS</div>
+              <h1>快捷访问</h1>
+            </div>
+          </header>
+
+          <section class="quick-section">
+            <div class="section-header">
+              <h2>系统工具</h2>
+              <span class="quick-subtitle">点击即可快速打开</span>
+            </div>
+            <div class="quick-grid" id="quick-container">
+            </div>
+          </section>
+          <footer class="footer"><p>KS System Monitor</p></footer>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>
