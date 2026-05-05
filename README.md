@@ -63,10 +63,10 @@ npm --version
 
 正式环境对应 `main` 分支，是当前稳定版本，用于日常使用。
 
-先切换到你想要存放项目的盘符，例如 E 盘：
+先切换到你想要存放项目的盘符，例如 E 盘（打开 PowerShell 执行）：
 
 ```bash
-E:
+cd E:\
 ```
 
 然后下载并运行：
@@ -87,7 +87,7 @@ npm start
 同样先切换到同一个盘符，然后下载：
 
 ```bash
-E:
+cd E:\
 git clone https://github.com/zhangwenbo77777-cmyk/it-toolbox.git it-toolbox-dev
 cd it-toolbox-dev
 git checkout dev
